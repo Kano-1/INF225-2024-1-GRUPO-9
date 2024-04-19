@@ -43,28 +43,23 @@ const Horas = () => {
         throw new Error('Token no encontrada');
       }
 
-
-
     const [fecha, setfecha] = useState('');
     const [datos, setDatos] = useState('');
     const [mostrarHoras, setMostrarHoras] = useState(false);
-
   
     const handleSubmit = async (event) => {
       event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
       try {
-
         // Realizar la solicitud al backend usando Axios (o Fetch API)
         const aux = API + fecha
         console.log(fecha)
-        const responses = await axios.get(`${aux}`)
+        await axios.get(`${aux}`)
         .then(response => {
           // Manejar la respuesta exitosa del backend        
           const lista = response.data
           console.log('Respuesta exitosa:', lista);
           setDatos(lista)
           setMostrarHoras(true);
-          
         })
         .catch(error => {
           // Manejar errores de la solicitud

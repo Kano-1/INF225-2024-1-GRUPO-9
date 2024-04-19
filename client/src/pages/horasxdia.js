@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import '../components/Navbar.css'; // Importamos el archivo de estilos CSS
 
-const API = "http://localhost:5000/be/hora/"
+const API = "http://localhost:5000/be/horas/"
 
 const Navbar = () => {
   const token = localStorage.getItem('token');
@@ -10,47 +11,48 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-    <ul>
-      {sesion ? (
-      <li>
-          <Link to="/logout">
-          <button type="button">Cerrar Sesión</button>
-          </Link>
-          <Link to="/horasx">
-          <button type="button">Horas por dia</button>
-          </Link>
-          <Link to="/">
-          <button type="button">Inicio</button>
-          </Link>
-      </li>
-      ) : (
-      <li>
-          <Link to="/login">
-          <button type="button">Iniciar Sesión</button>
-          </Link>
-          <Link to="/">
-          <button type="button">Inicio</button>
-          </Link>
-      </li>
-      )}
-      {/* Agrega más elementos de la barra de navegación con botones y enlaces según sea necesario */}
-    </ul>
+      <ul>
+        {sesion ? (
+          <li>
+            <Link to="/logout">
+              <button type="button">Cerrar Sesión</button>
+            </Link>
+            <Link to="/">
+              <button type="button">Inicio</button>
+            </Link>
+          </li>
+        ) : (
+          <li>
+            <Link to="/login">
+              <button type="button">Iniciar Sesión</button>
+            </Link>
+            <Link to="/">
+              <button type="button">Inicio</button>
+            </Link>
+          </li>
+        )}
+        {/* Agrega más elementos de la barra de navegación con botones y enlaces según sea necesario */}
+      </ul>
     </nav>
   );
 };
 
 const Horas = () => {
-    const [rut, setrut] = useState('');
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('Token no encontrada');
+      }
+
+    const [fecha, setfecha] = useState('');
     const [datos, setDatos] = useState('');
     const [mostrarHoras, setMostrarHoras] = useState(false);
-
   
     const handleSubmit = async (event) => {
       event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
       try {
         // Realizar la solicitud al backend usando Axios (o Fetch API)
-        const aux = API + rut
-        console.log(aux)
+        const aux = API + fecha
+        console.log(fecha)
         await axios.get(`${aux}`)
         .then(response => {
           // Manejar la respuesta exitosa del backend        
@@ -78,46 +80,46 @@ const Horas = () => {
         console.error('Error al enviar los datos:', error);
       }
     };
-
+  
     return (
-    <body>
+      <body>
       <div>
       <Navbar />
       <div class="container">
-        <form onSubmit={handleSubmit}>
-          <label>
-            RUT:
-            <input
-              type="String"
-              value={rut}
-              onChange={(e) => setrut(e.target.value)}
-            />
-          </label>
-          <br />
-          <br />
-          <button type="submit">Enviar</button>
-        </form>
-        </div>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Ingresar fecha:
+          <input
+            type="Date"
+            format="dd-mm-yyyy"
+            value={fecha}
+            onChange={(e) => setfecha(e.target.value)}
+          />
+        </label>
+        <br />
+
+        <br />
+        <button type="submit">Enviar</button>
+      </form>
       {mostrarHoras && 
-      <div>
-      <div class="container">
-      <h2>Lista de Datos:</h2>
-      <ul>
-        {datos.map((dato, index) => (
-          <li key={index}>
-            <p>RUT: {dato.rut}</p>
-            <p>Teléfono: {dato.telefono}</p>
-            <p>Fecha: {dato.fecha.split('T')[0]}</p>
-            <p>Hora: {dato.hora}</p>
-            <p>Correo: {dato.correo}</p>
-            <hr />
-          </li>
-        ))}
-      </ul>
-      </div>
-      </div>}
-      </div>
-    </body>
+    <div>
+    <h2>Lista de Datos:</h2>
+    <ul>
+      {datos.map((dato, index) => (
+        <li key={index}>
+          <p>RUT: {dato.rut}</p>
+          <p>Teléfono: {dato.telefono}</p>
+          <p>Fecha: {dato.fecha.split('T')[0]}</p>
+          <p>Hora: {dato.hora}</p>
+          <p>Correo: {dato.correo}</p>
+          <hr />
+        </li>
+      ))}
+    </ul>
+  </div>}
+  </div>
+  </div>
+  </body>
       
     );
   };

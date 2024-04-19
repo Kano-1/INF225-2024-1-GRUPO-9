@@ -14,17 +14,17 @@ const Navbar = () => {
             <Link to="/logout">
               <button type="button">Cerrar Sesión</button>
             </Link>
-            <Link to="/horasxdia">
-              <button type="button">Horas por dia</button>
-            </Link>
-            <Link to="/pacienteprofile">
-              <button type="button">Añadir o Editar Paciente</button>
+            <Link to="/">
+              <button type="button">Inicio</button>
             </Link>
           </li>
         ) : (
           <li>
             <Link to="/login">
               <button type="button">Iniciar Sesión</button>
+            </Link>
+            <Link to="/">
+              <button type="button">Inicio</button>
             </Link>
           </li>
         )}
@@ -34,20 +34,32 @@ const Navbar = () => {
   );
 };
 
-const HomePage = () => {
-  return (
-    <div>
+const Horas = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        throw new Error('Token no encontrada');
+      }  
+    return (
+      <body>
+      <div>
       <Navbar />
       <div class="container">
-      <div class="landing-page">
-        <h1>Sistema digital hospitalario</h1>
-        <Link to="/ReservaHoras">
-          <button type="button">Consulta de horas para pacientes</button>
-        </Link>
+        <li>
+          <Link to="/editprofile">
+            <button type="button">Editar o eliminar pacientes</button>
+          </Link>
+        </li>
+        <li>
+          <div></div>
+          <Link to="/addprofile">
+            <button type="button">Añadir nuevo paciente</button>
+          </Link>
+        </li>
       </div>
       </div>
-    </div>
-  );
-};
+      </body>
+      
+    );
+  };
 
-export default HomePage;
+  export default Horas;

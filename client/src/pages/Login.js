@@ -42,7 +42,7 @@ const Formulario = () => {
 
     try {
       // Realizar la solicitud al backend usando Axios (o Fetch API)
-      const responses = await axios.post(`${API}/login`, {
+      await axios.post(`${API}/login`, {
         correo: correo,
         password: password,
       })
