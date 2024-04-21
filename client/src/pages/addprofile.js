@@ -37,91 +37,58 @@ const Navbar = () => {
   );
 };
 
-const Horas = () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-        throw new Error('Token no encontrada');
-      }
+const CreateUserForm = () => {
+  const [formData, setFormData] = useState({
+    rut: '',
+    telefono: '',
+    fecha: '',
+    hora: '',
+    correo: '',
+  });
 
-    const [fecha, setfecha] = useState('');
-    const [datos, setDatos] = useState('');
-    const [mostrarHoras, setMostrarHoras] = useState(false);
-  
-    const handleSubmit = async (event) => {
-      event.preventDefault(); // Evitar que el formulario se envíe de forma predeterminada
-      try {
-        // Realizar la solicitud al backend usando Axios (o Fetch API)
-        const aux = API + fecha
-        console.log(fecha)
-        await axios.get(`${aux}`)
-        .then(response => {
-          // Manejar la respuesta exitosa del backend        
-          const lista = response.data
-          console.log('Respuesta exitosa:', lista);
-          setDatos(lista)
-          setMostrarHoras(true);
-        })
-        .catch(error => {
-          // Manejar errores de la solicitud
-          if (error.response) {
-            // El servidor respondió con un código de estado fuera del rango 2xx
-            console.error('Error de respuesta:', error.response.status);
-            console.error('Horas de error:', error.response.data);
-          } else if (error.request) {
-            // No se recibió una respuesta del servidor
-            console.error('No se recibió respuesta del servidor:', error.request);
-          } else {
-            // Ocurrió un error al configurar la solicitud
-            console.error('Error al configurar la solicitud:', error.message);
-          }
-        });
-      } catch (error) {
-        // Manejar errores de la solicitud al backend
-        console.error('Error al enviar los datos:', error);
-      }
-    };
-  
-    return (
-      <body>
-      <div>
-      <Navbar />
-      <div class="container">
-      <form onSubmit={handleSubmit}>
-        <label>
-          Ingresar fecha:
-          <input
-            type="Date"
-            format="dd-mm-yyyy"
-            value={fecha}
-            onChange={(e) => setfecha(e.target.value)}
-          />
-        </label>
-        <br />
-
-        <br />
-        <button type="submit">Enviar</button>
-      </form>
-      {mostrarHoras && 
-    <div>
-    <h2>Lista de Datos:</h2>
-    <ul>
-      {datos.map((dato, index) => (
-        <li key={index}>
-          <p>RUT: {dato.rut}</p>
-          <p>Teléfono: {dato.telefono}</p>
-          <p>Fecha: {dato.fecha.split('T')[0]}</p>
-          <p>Hora: {dato.hora}</p>
-          <p>Correo: {dato.correo}</p>
-          <hr />
-        </li>
-      ))}
-    </ul>
-  </div>}
-  </div>
-  </div>
-  </body>
-      
-    );
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  export default Horas;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('/Routes/paciente', formData);
+      alert('Usuario creado exitosamente');
+      setFormData({  rut: '',telefono: '',fecha: '',hora: '',correo: '',});
+    } catch (error) {
+      console.error('Error al crear usuario:', error);
+    }
+  };
+
+  return (
+    <div>
+      <h2>Crear Usuario</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="rut">Nombre:</label>
+          <input type="text" id="rut" name="rut" value={formData.rut} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="telefono">Nombre:</label>
+          <input type="text" id="telefono" name="telefono" value={formData.telefono} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="fecha">Nombre:</label>
+          <input type="text" id="fecha" name="fecha" value={formData.fecha} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="hora">Nombre:</label>
+          <input type="text" id="hora" name="hora" value={formData.hora} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="correo">Nombre:</label>
+          <input type="text" id="correo" name="correo" value={formData.correo} onChange={handleChange} />
+        </div>
+        <button type="submit">Crear Usuario</button>
+      </form>
+    </div>
+  );
+};
+
+export default CreateUserForm;
