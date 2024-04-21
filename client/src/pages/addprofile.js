@@ -66,23 +66,27 @@ const CreateUserForm = () => {
       <h2>Crear Usuario</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="rut">Nombre:</label>
+          <label htmlFor="Nombre">Nombre:</label>
+          <input type="text" id="nombre" name="nombre" value={formData.correo} onChange={handleChange} />
+        </div>
+        <div>
+          <label htmlFor="rut">RUT:</label>
           <input type="text" id="rut" name="rut" value={formData.rut} onChange={handleChange} />
         </div>
         <div>
-          <label htmlFor="telefono">Nombre:</label>
+          <label htmlFor="telefono">Telefono:</label>
           <input type="text" id="telefono" name="telefono" value={formData.telefono} onChange={handleChange} />
         </div>
         <div>
-          <label htmlFor="fecha">Nombre:</label>
+          <label htmlFor="fecha">Fecha:</label>
           <input type="text" id="fecha" name="fecha" value={formData.fecha} onChange={handleChange} />
         </div>
         <div>
-          <label htmlFor="hora">Nombre:</label>
+          <label htmlFor="hora">Hora:</label>
           <input type="text" id="hora" name="hora" value={formData.hora} onChange={handleChange} />
         </div>
         <div>
-          <label htmlFor="correo">Nombre:</label>
+          <label htmlFor="correo">Correo:</label>
           <input type="text" id="correo" name="correo" value={formData.correo} onChange={handleChange} />
         </div>
         <button type="submit">Crear Usuario</button>
