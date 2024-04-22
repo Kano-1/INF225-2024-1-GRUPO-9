@@ -48,15 +48,14 @@ const eliminarHora = async(req, res) => {
     const hora = await paciente.findByIdAndDelete(req.params.id)
     if(!hora) return res.status(404).json({message: "tarea no encontrada"})
     return res.sendStatus(204);
-
 };
+
 const modificarHoras = async(req, res) => {
     const hora = await paciente.findByIdAndUpdate(req.params.id, req.body, {
         new:true
     })
     if(!hora) return res.status(404).json({message: "tarea no encontrada"})
     res.json(hora)
-
 };
 
 module.exports = { 

@@ -37,37 +37,46 @@ const Navbar = () => {
   );
 };
 
+const initialState = {
+  rut: '',
+  telefono: '',
+  fecha: '',
+  hora: '',
+  correo: '',
+};
+
 const CreateUserForm = () => {
-  const [formData, setFormData] = useState({
-    rut: '',
-    telefono: '',
-    fecha: '',
-    hora: '',
-    correo: '',
-  });
+  const [formData, setFormData] = useState(initialState);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      await axios.post('/Routes/paciente', formData);
-      alert('Usuario creado exitosamente');
-      setFormData({  rut: '',telefono: '',fecha: '',hora: '',correo: '',});
+        const response = await axios.post('/Routes/paciente', formData);
+        console.log('API response:', response); // Log the entire response object
+        if (response.data.success) { // Check for a success property in the response
+            alert('Usuario creado exitosamente');
+            setFormData({ ...initialState }); // Reset form data
+        } else {
+            console.error('API error:', response.data.error); // Log any specific error message
+        }
     } catch (error) {
-      console.error('Error al crear usuario:', error);
+        console.error('Error al crear usuario:', error);
     }
   };
 
   return (
     <div>
+      <Navbar />
+      <div class="container">
       <h2>Crear Usuario</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="Nombre">Nombre:</label>
-          <input type="text" id="nombre" name="nombre" value={formData.correo} onChange={handleChange} />
+          <input type="text" id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} />
         </div>
         <div>
           <label htmlFor="rut">RUT:</label>
@@ -91,6 +100,7 @@ const CreateUserForm = () => {
         </div>
         <button type="submit">Crear Usuario</button>
       </form>
+      </div>
     </div>
   );
 };
